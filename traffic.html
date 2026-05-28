@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fire Extinguisher Dashboard</title>
+
+  <style>
+    body{
+      font-family: Arial;
+      margin:0;
+      background:#0f172a;
+      color:white;
+    }
+
+    .header{
+      background:#1e293b;
+      padding:20px;
+      text-align:center;
+      font-size:25px;
+      font-weight:bold;
+    }
+
+    .container{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:20px;
+      padding:20px;
+    }
+
+    .card{
+      background:#1e293b;
+      padding:20px;
+      border-radius:10px;
+      text-align:center;
+      box-shadow:0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .value{
+      font-size:30px;
+      margin-top:10px;
+      color:#38bdf8;
+    }
+
+    .safe{
+      color:#22c55e;
+      font-size:28px;
+      font-weight:bold;
+    }
+
+    .danger{
+      color:red;
+      font-size:28px;
+      font-weight:bold;
+    }
+
+    button{
+      padding:10px;
+      border:none;
+      border-radius:5px;
+      margin-top:10px;
+      background:#38bdf8;
+      cursor:pointer;
+      font-weight:bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="header">
+  🔥 SMART FIRE EXTINGUISHER DASHBOARD
+</div>
+
+<div class="container">
+
+  <!-- TEMPERATURE -->
+  <div class="card">
+    <h2>🌡 Temperature</h2>
+    <div class="value" id="temp">0 °C</div>
+  </div>
+
+  <!-- SMOKE -->
+  <div class="card">
+    <h2>💨 Smoke Level</h2>
+    <div class="value" id="smoke">0</div>
+  </div>
+
+  <!-- STATUS -->
+  <div class="card">
+    <h2>🚨 System Status</h2>
+    <div id="status" class="safe">SAFE</div>
+  </div>
+
+  <!-- RELAY -->
+  <div class="card">
+    <h2>🔌 Relay</h2>
+    <div class="value" id="relay">OFF</div>
+  </div>
+
+  <!-- BUZZER -->
+  <div class="card">
+    <h2>🔊 Alarm</h2>
+    <div class="value" id="alarm">OFF</div>
+  </div>
+
+</div>
+
+<script>
+
+// ===== SIMULATION =====
+// replace later with ESP32 fetch()
+
+function updateDashboard() {
+
+  // fake values
+  let smoke = Math.floor(Math.random() * 500);
+  let temp = Math.floor(Math.random() * 60);
+
+  document.getElementById("smoke").innerText = smoke;
+  document.getElementById("temp").innerText = temp + " °C";
+
+  // fire condition
+  if(smoke > 300 || temp > 40){
+
+    document.getElementById("status").innerText = "FIRE DETECTED!";
+    document.getElementById("status").className = "danger";
+
+    document.getElementById("relay").innerText = "ON";
+    document.getElementById("alarm").innerText = "ON";
+
+  }
+  else{
+
+    document.getElementById("status").innerText = "SAFE";
+    document.getElementById("status").className = "safe";
+
+    document.getElementById("relay").innerText = "OFF";
+    document.getElementById("alarm").innerText = "OFF";
+  }
+}
+
+// auto update every 2 sec
+setInterval(updateDashboard,2000);
+
+</script>
+
+</body>
+</html>
