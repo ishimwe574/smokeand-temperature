@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fire System</title>
+
+  <style>
+    body{
+      font-family: Arial;
+      margin:0;
+      background:#0f172a;
+      color:white;
+    }
+
+    /* LOGIN */
+    #login{
+      width:300px;
+      margin:120px auto;
+      background:#1e293b;
+      padding:20px;
+      border-radius:10px;
+      text-align:center;
+    }
+
+    input{
+      width:90%;
+      padding:10px;
+      margin:8px 0;
+      border:none;
+      border-radius:5px;
+    }
+
+    button{
+      padding:10px;
+      border:none;
+      border-radius:5px;
+      background:#38bdf8;
+      font-weight:bold;
+      cursor:pointer;
+      margin-top:5px;
+    }
+
+    /* DASHBOARD */
+    #dashboard{
+      display:none;
+    }
+
+    .header{
+      background:#1e293b;
+      padding:20px;
+      text-align:center;
+      font-size:25px;
+      font-weight:bold;
+    }
+
+    .container{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:20px;
+      padding:20px;
+    }
+
+    .card{
+      background:#1e293b;
+      padding:20px;
+      border-radius:10px;
+      text-align:center;
+    }
+
+    .value{ font-size:30px; color:#38bdf8; }
+
+    .safe{ color:#22c55e; font-size:28px; font-weight:bold; }
+    .danger{ color:red; font-size:28px; font-weight:bold; }
+
+    img{
+      width:100%;
+      border-radius:10px;
+      margin-top:10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================= LOGIN ================= -->
+<div id="login">
+  <h2>Login System</h2>
+
+  <input id="user" placeholder="Username">
+  <input id="pass" type="password" placeholder="Password">
+
+  <button onclick="login()">Login</button>
+
+  <p id="msg" style="color:red;"></p>
+</div>
+
+<!-- ================= DASHBOARD ================= -->
+<div id="dashboard">
+
+  <div class="header">
+    SMART FIRE DASHBOARD
+  </div>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>Temperature</h2>
+      <div class="value" id="temp">0 °C</div>
+    </div>
+
+    <div class="card">
+      <h2>Smoke</h2>
+      <div class="value" id="smoke">0</div>
+    </div>
+
+    <div class="card">
+      <h2>Status</h2>
+      <div id="status" class="safe">SAFE</div>
+    </div>
+
+    <div class="card">
+      <h2>Relay</h2>
+      <div class="value" id="relay">OFF</div>
+    </div>
+
+    <div class="card">
+      <h2>Alarm</h2>
+      <div class="value" id="alarm">OFF</div>
+    </div>
+
+    <!-- LIVE CAMERA -->
+    <div class="card">
+      <h2>Live Camera</h2>
+
+      <img id="cam"
+           src="http://192.168.1.100/cam-hi.jpg">
+
+      <button onclick="refreshCam()">Refresh</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+
+function login(){
+  let u = document.getElementById("user").value;
+  let p = document.getElementById("pass").value;
+
+  if(u === "admin" && p === "1234"){
+    document.getElementById("login").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+
+    startSystem();
+  } else {
+    document.getElementById("msg").innerText = "Wrong login!";
+  }
+}
+
+// sensor simulation
+function startSystem(){
+
+  setInterval(() => {
+
+    let smoke = Math.floor(Math.random()*500);
+    let temp = Math.floor(Math.random()*60)
+
+    document.getElementById("smoke").innerText = smoke;
+    document.getElementById("temp").innerText = temp + " °C";
+
+    if(smoke > 300 || temp > 40){
+      document.getElementById("status").innerText = "FIRE DETECTED";
+      document.getElementById("status").className = "danger";
+      document.getElementById("relay").innerText = "ON";
+      document.getElementById("alarm").innerText = "ON";
+    } else {
+      document.getElementById("status").innerText = "SAFE";
+      document.getElementById("status").className = "safe";
+      document.getElementById("relay").innerText = "OFF";
+      document.getElementById("alarm").innerText = "OFF";
+    }
+
+  }, 2000);
+}
+
+// camera refresh
+function refreshCam(){
+  document.getElementById("cam").src =
+    "http://192.168.1.100/cam-hi.jpg?time=" + new Date().getTime();
+}
+
+</script>
+
+</body>
+</html>
